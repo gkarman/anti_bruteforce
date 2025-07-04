@@ -1,3 +1,3 @@
-module github.com/gkarman/otus_project/anti_bruteforce
+module github.com/gkarman/anti_bruteforce
 
 go 1.23.5
