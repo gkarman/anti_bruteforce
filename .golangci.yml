@@ -1,8 +1,6 @@
 run:
   tests: true
-  build-tags:
-    - bench
-    - !bench
+  build-tags: bench
 
 linters-settings:
   funlen:
@@ -12,7 +10,6 @@ linters-settings:
     rules:
       Main:
         files:
-          - "!$test"
           - cmd/calendar/**
         allow:
           - $gostd
@@ -20,11 +17,12 @@ linters-settings:
           - github.com/spf13/pflag
       Test:
         files:
-          - $test
+          - "*_test.go"
         allow:
           - $gostd
           - github.com/stretchr/testify
           - github.com/google/uuid
+
 issues:
   exclude-rules:
     - path: _test\.go
