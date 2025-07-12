@@ -1,7 +1,7 @@
 sqlRepository:
   host: "localhost"
   port: 5432
-  db: "calendar"
+  db: "anti_bruteforce"
   user: "user"
   password: "pass"
 

@@ -13,11 +13,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var migrateCmd = &cobra.Command{
-	Use:   "migrate",
-	Short: "Выполнить миграцию базы данных",
+var migrateRollbackCmd = &cobra.Command{
+	Use:   "migrate:rollback",
+	Short: "Откатить последнюю миграцию",
 	Run: func(_ *cobra.Command, _ []string) {
-		fmt.Println("migration run...")
+		fmt.Println("Откат последней миграции...")
 
 		dsn := fmt.Sprintf(
 			"postgres://%s:%s@%s:%s/%s?sslmode=disable",
@@ -30,17 +30,17 @@ var migrateCmd = &cobra.Command{
 
 		m, err := migrate.New("file://migrations", dsn)
 		if err != nil {
-			log.Fatalf("migrator creating: %v", err)
+			log.Fatalf("ошибка создания мигратора: %v", err)
 		}
 
-		if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
-			log.Fatalf("mirgate: %v", err)
+		if err := m.Steps(-1); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+			log.Fatalf("ошибка при откате миграции: %v", err)
 		}
 
-		fmt.Println("success migration")
+		fmt.Println("Миграция успешно откатилась на 1 шаг")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(migrateCmd)
+	rootCmd.AddCommand(migrateRollbackCmd)
 }

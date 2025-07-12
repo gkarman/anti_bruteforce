@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gkarman/anti_bruteforce/internal/config"
 	"github.com/spf13/cobra"
@@ -40,6 +41,11 @@ func Execute() {
 }
 
 func runApp() error {
+	sqlRepo, err := storage.New(cfg.SQLRepository)
+	if err != nil {
+		return fmt.Errorf("init sql repo: %w", err)
+	}
+
 	fmt.Println(cfg.GrpcServer)
 	fmt.Println(cfg.InMemoryRepository)
 	fmt.Println(cfg.SQLRepository)
