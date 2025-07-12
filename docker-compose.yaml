@@ -12,6 +12,14 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - anti_bruteforce_redisdata:/data
+
+
 volumes:
   anti_bruteforce_pgdata:
-  rabbitmq_data:
+  anti_bruteforce_redisdata:
