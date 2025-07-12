@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: anti_bruteforce
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - anti_bruteforce_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  anti_bruteforce_pgdata:
+  rabbitmq_data:
