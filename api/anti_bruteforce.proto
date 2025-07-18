@@ -6,30 +6,30 @@ package anti_bruteforce;
 option go_package = "github.com/gkarman/anti_bruteforce/api/pb;pb";
 
 service AntiBruteforceService {
-  rpc isCanLogin (isCanLoginRequest) returns (isCanLoginResponse);
-  rpc clearBucket (clearBucketRequest) returns (clearBucketResponse);
+  rpc IsCanLogin (IsCanLoginRequest) returns (IsCanLoginResponse);
+  rpc ClearBucket (ClearBucketRequest) returns (ClearBucketResponse);
   rpc AddCIDRToWhiteList (AddCIDRToWhiteListRequest) returns (AddCIDRToWhiteListResponse);
   rpc AddCIDRToBlackList (AddCIDRToBlackListRequest) returns (AddCIDRToBlackListResponse);
   rpc DeleteCIDRFromBlackList (DeleteCIDRFromBlackListRequest) returns (DeleteCIDRFromBlackListResponse);
   rpc DeleteCIDRFromWhiteList (DeleteCIDRFromWhiteListRequest) returns (DeleteCIDRFromWhiteListResponse);
 }
 
-message isCanLoginRequest {
+message IsCanLoginRequest {
   string login = 1;
   string password = 2;
   string ip = 3;
 }
 
-message isCanLoginResponse {
+message IsCanLoginResponse {
   bool ok = 1;
 }
 
-message clearBucketRequest {
+message ClearBucketRequest {
   string login = 1;
   string ip = 2;
 }
 
-message clearBucketResponse {
+message ClearBucketResponse {
   bool ok = 1;
   string message = 2;
 }

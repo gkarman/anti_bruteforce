@@ -73,6 +73,19 @@ func (s *GrpcServer) Stop(ctx context.Context) error {
 	}
 }
 
+func (s *GrpcServer) IsCanLogin(ctx context.Context, req *pb.IsCanLoginRequest) (*pb.IsCanLoginResponse, error) {
+	return &pb.IsCanLoginResponse{
+		Ok: true,
+	}, nil
+}
+
+func (s *GrpcServer) ClearBucket(ctx context.Context, req *pb.ClearBucketRequest) (*pb.ClearBucketResponse, error) {
+	return &pb.ClearBucketResponse{
+		Ok:      true,
+		Message: "Success",
+	}, nil
+}
+
 func (s *GrpcServer) AddCIDRToBlackList(ctx context.Context, req *pb.AddCIDRToBlackListRequest) (*pb.AddCIDRToBlackListResponse, error) {
 	return &pb.AddCIDRToBlackListResponse{
 		Ok:      true,
