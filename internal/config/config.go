@@ -13,12 +13,12 @@ var (
 )
 
 type Config struct {
-	SQLRepository      SQLRepository      `yaml:"sqlRepository"`
-	InMemoryRepository InMemoryRepository `yaml:"inMemoryRepository"`
-	GrpcServer         GrpcServer         `yaml:"grpcServer"`
+	DBRepo     DBRepo     `yaml:"dbRepo"`
+	MemoryRepo MemoryRepo `yaml:"memoryRepo"`
+	GrpcServer GrpcServer `yaml:"grpcServer"`
 }
 
-type SQLRepository struct {
+type DBRepo struct {
 	Host     string `yaml:"host"`
 	Port     string `yaml:"port"`
 	DB       string `yaml:"db"`
@@ -26,7 +26,7 @@ type SQLRepository struct {
 	Password string `yaml:"password"`
 }
 
-type InMemoryRepository struct {
+type MemoryRepo struct {
 	Addr     string `yaml:"addr"`
 	Password string `yaml:"password"`
 	DB       int    `yaml:"db"`

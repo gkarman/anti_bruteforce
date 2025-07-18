@@ -1,10 +1,17 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"log"
-	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
+	"github.com/gkarman/anti_bruteforce/internal/app/anti_bruteforce/infrastructure/app"
+	"github.com/gkarman/anti_bruteforce/internal/app/anti_bruteforce/infrastructure/repository/bucketrepo"
+	"github.com/gkarman/anti_bruteforce/internal/app/anti_bruteforce/infrastructure/repository/configrepo"
+	"github.com/gkarman/anti_bruteforce/internal/app/anti_bruteforce/infrastructure/server"
 	"github.com/gkarman/anti_bruteforce/internal/config"
 	"github.com/spf13/cobra"
 )
@@ -26,7 +33,7 @@ var rootCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Starting anti-bruteforce...")
+		log.Println("Starting anti-bruteforce...")
 		if err := runApp(); err != nil {
 			log.Fatalf("Fail start: %v", err)
 		}
@@ -41,13 +48,41 @@ func Execute() {
 }
 
 func runApp() error {
-	sqlRepo, err := storage.New(cfg.SQLRepository)
+	configRepo, err := configrepo.NewPgConfigRepo(cfg.DBRepo)
 	if err != nil {
-		return fmt.Errorf("init sql repo: %w", err)
+		return fmt.Errorf("create configRepo repository: %w", err)
 	}
 
-	fmt.Println(cfg.GrpcServer)
-	fmt.Println(cfg.InMemoryRepository)
-	fmt.Println(cfg.SQLRepository)
+	bucketRepo, err := bucketrepo.NewRedisBucketRepo(cfg.MemoryRepo)
+	if err != nil {
+		return fmt.Errorf("create bucketRepo repository: %w", err)
+	}
+
+	antiBruteForceApp := app.NewAntiBruteForceApp(configRepo, bucketRepo)
+	serverGrpc := server.NewGrpcServer(cfg.GrpcServer, *antiBruteForceApp)
+
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
+	defer stop()
+
+	log.Println("Starting server...")
+
+	go func() {
+		if err := serverGrpc.Start(ctx); err != nil {
+			log.Fatalf("failed to start gRPC server: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := serverGrpc.Stop(shutdownCtx); err != nil {
+		log.Printf("gRPC server shutdown error: %v", err)
+	} else {
+
+		log.Println("gRPC server shutdown complete")
+	}
+
 	return nil
 }

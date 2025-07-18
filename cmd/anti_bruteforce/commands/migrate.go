@@ -21,11 +21,11 @@ var migrateCmd = &cobra.Command{
 
 		dsn := fmt.Sprintf(
 			"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-			cfg.SQLRepository.User,
-			cfg.SQLRepository.Password,
-			cfg.SQLRepository.Host,
-			cfg.SQLRepository.Port,
-			cfg.SQLRepository.DB,
+			cfg.DBRepo.User,
+			cfg.DBRepo.Password,
+			cfg.DBRepo.Host,
+			cfg.DBRepo.Port,
+			cfg.DBRepo.DB,
 		)
 
 		m, err := migrate.New("file://migrations", dsn)

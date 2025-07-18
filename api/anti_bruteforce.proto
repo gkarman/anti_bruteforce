@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+
+package anti_bruteforce;
+
+option go_package = "github.com/gkarman/anti_bruteforce/api/pb;pb";
+
+service AntiBruteforceService {
+  rpc isCanLogin (isCanLoginRequest) returns (isCanLoginResponse);
+  rpc clearBucket (clearBucketRequest) returns (clearBucketResponse);
+  rpc AddCIDRToWhiteList (AddCIDRToWhiteListRequest) returns (AddCIDRToWhiteListResponse);
+  rpc AddCIDRToBlackList (AddCIDRToBlackListRequest) returns (AddCIDRToBlackListResponse);
+  rpc DeleteCIDRFromBlackList (DeleteCIDRFromBlackListRequest) returns (DeleteCIDRFromBlackListResponse);
+  rpc DeleteCIDRFromWhiteList (DeleteCIDRFromWhiteListRequest) returns (DeleteCIDRFromWhiteListResponse);
+}
+
+message isCanLoginRequest {
+  string login = 1;
+  string password = 2;
+  string ip = 3;
+}
+
+message isCanLoginResponse {
+  bool ok = 1;
+}
+
+message clearBucketRequest {
+  string login = 1;
+  string ip = 2;
+}
+
+message clearBucketResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message AddCIDRToBlackListRequest {
+  string cidr = 1;
+}
+
+message AddCIDRToBlackListResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message DeleteCIDRFromBlackListRequest {
+  string cidr = 1;
+}
+
+message DeleteCIDRFromBlackListResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message AddCIDRToWhiteListRequest {
+  string cidr = 1;
+}
+
+message AddCIDRToWhiteListResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message DeleteCIDRFromWhiteListRequest {
+  string cidr = 1;
+}
+
+message DeleteCIDRFromWhiteListResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
